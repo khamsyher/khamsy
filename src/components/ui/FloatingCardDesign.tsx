@@ -5,28 +5,36 @@ function cnLocal(...inputs: (string | undefined | null | boolean)[]): string {
   return inputs.filter(Boolean).join(" ")
 }
 
-
-// Simple Card Components
+// Card Components
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cnLocal("rounded-xl border bg-card text-card-foreground shadow", className)} {...props} />
+  <div
+    ref={ref}
+    className={cnLocal(
+      "rounded-xl border shadow bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700",
+      className
+    )}
+    {...props}
+  />
 ))
 Card.displayName = "Card"
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cnLocal("p-6 pt-0", className)} {...props} />,
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cnLocal("p-6 pt-0", className)} {...props} />
+  )
 )
 CardContent.displayName = "CardContent"
 
-// Simple Badge Component
+// Badge Component
 interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "secondary" | "outline"
 }
 
 const Badge: React.FC<BadgeProps> = ({ className, variant = "default", ...props }) => {
   const variants = {
-    default: "bg-primary text-primary-foreground",
-    secondary: "bg-secondary text-secondary-foreground",
-    outline: "border border-input bg-background text-foreground",
+    default: "bg-blue-600 text-white dark:bg-blue-500 dark:text-white",
+    secondary: "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200",
+    outline: "border border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-200",
   }
 
   return (
@@ -34,12 +42,13 @@ const Badge: React.FC<BadgeProps> = ({ className, variant = "default", ...props 
       className={cnLocal(
         "inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors",
         variants[variant],
-        className,
+        className
       )}
       {...props}
     />
   )
 }
+
 // Types
 interface Technology {
   name: string
@@ -49,8 +58,7 @@ interface Technology {
   level: "Beginner" | "Intermediate" | "Advanced" | "Expert"
 }
 
-
-// Design Components
+// Design Component
 interface DesignProps {
   technologies: Technology[]
   isVisible: boolean
@@ -64,24 +72,25 @@ const FloatingCardsDesign: React.FC<DesignProps> = ({ technologies, isVisible })
         return (
           <Card
             key={tech.name}
-            className={`group relative overflow-hidden bg-card/60 backdrop-blur-xl border-white/10 hover:border-white/10 hover:bg-card/80 transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/10 dark:hover:shadow-white/5  ${
+            className={cnLocal(
+              "group relative overflow-hidden bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border-white/10 hover:border-white/10 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/10 dark:hover:shadow-white/5",
               isVisible ? "animate-in slide-in-from-bottom-8 fade-in" : "opacity-0"
-            }`}
+            )}
             style={{ animationDelay: `${index * 100}ms` }}
           >
-            <CardContent className="p-6 text-center space-y-3">
+            <CardContent className="text-center space-y-3">
               <div className="relative">
                 <div
                   className={`w-12 h-12 mx-auto rounded-xl bg-gradient-to-r ${tech.color} p-3 group-hover:scale-110 transition-transform duration-300 shadow-lg flex items-center justify-center`}
                 >
                   <Icon className="w-6 h-6 text-white" />
                 </div>
-                <div className="absolute -inset-2 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm" />
+                <div className="absolute -inset-2 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm" />
               </div>
 
               <div>
-                <h3 className="font-semibold text-sm text-foreground mb-1">{tech.name}</h3>
-                <Badge variant="secondary" className="text-xs bg-secondary/60 backdrop-blur-sm">
+                <h3 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">{tech.name}</h3>
+                <Badge variant="secondary" className="bg-gray-300 dark:bg-gray-700 dark:text-gray-100">
                   {tech.level}
                 </Badge>
               </div>
@@ -93,4 +102,4 @@ const FloatingCardsDesign: React.FC<DesignProps> = ({ technologies, isVisible })
   )
 }
 
-export default FloatingCardsDesign;
+export default FloatingCardsDesign

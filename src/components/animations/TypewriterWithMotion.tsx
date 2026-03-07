@@ -13,7 +13,7 @@ const InfiniteTypewriter: React.FC<TypewriterProps> = ({ text, speed = 100, paus
   const [typing, setTyping] = useState(true);
 
   useEffect(() => {
-    let interval: number;
+    let interval: ReturnType<typeof setInterval>;
 
     if (typing) {
       interval = setInterval(() => {

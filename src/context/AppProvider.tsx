@@ -11,7 +11,6 @@ interface AppContextType {
   changeLang: (newLang: string) => void;
 }
 
-// Create Context
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 interface AppProviderProps {
@@ -21,29 +20,41 @@ interface AppProviderProps {
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const { i18n } = useTranslation();
 
-  // Sidebar state
   const [isSidebarActive, setIsSidebarActive] = useState<boolean>(false);
 
-  // Theme state
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-  // Language state
   const [language, setLanguage] = useState<string>(i18n.language);
 
-  // Toggle Sidebar
   const toggleSidebar = () => setIsSidebarActive(!isSidebarActive);
 
-  // Toggle Theme
-  const toggleTheme = () => setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
 
-  // Change Language
+  useEffect(() => {
+    const html = document.documentElement;
+    if (theme === 'dark') {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = (localStorage.getItem('theme') as 'light' | 'dark') ?? (prefersDark ? 'dark' : 'light');
+    setTheme(savedTheme);
+  }, []);
+
   const changeLang = (newLang: string) => {
     i18n.changeLanguage(newLang);
     setLanguage(newLang);
     localStorage.setItem('lang', newLang);
   };
 
-  // Change body class to apply the correct font
   useEffect(() => {
     document.body.classList.remove('lang-en', 'lang-la', 'lang-cn');
     if (language === 'en') {
@@ -55,7 +66,6 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   }, [language]);
 
-  // Provide global state
   return (
     <AppContext.Provider value={{ isSidebarActive, toggleSidebar, theme, toggleTheme, language, changeLang }}>
       {children}
@@ -63,7 +73,6 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   );
 };
 
-// Custom Hook for using the context
 const useAppContext = (): AppContextType => {
   const context = useContext(AppContext);
   if (!context) {

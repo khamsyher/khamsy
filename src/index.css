@@ -1,71 +1,111 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
+/* ─── Color Theme System ─── */
+:root {
+  --background: #fafafa;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f0ff;
+  --secondary-foreground: #5b21b6;
+  --accent: #7c3aed;
+  --accent-foreground: #ffffff;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #7c3aed;
+  --surface: #ffffff;
+  --surface-hover: #f5f5f5;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --radius: 0.625rem;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #171717;
+  --card-foreground: #fafafa;
+  --primary: #a78bfa;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1e1b4b;
+  --secondary-foreground: #c4b5fd;
+  --accent: #a78bfa;
+  --accent-foreground: #0a0a0a;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --border: #2e2e2e;
+  --input: #2e2e2e;
+  --ring: #a78bfa;
+  --surface: #171717;
+  --surface-hover: #262626;
+  --destructive: #dc2626;
+  --destructive-foreground: #fafafa;
+}
+
+/* ─── Register theme tokens in TailwindCSS v4 ─── */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+}
+
+/* ─── Fonts ─── */
 @font-face {
   font-family: "Geist";
-  src: url('./assets/fonts/Geist.ttf') format('truetype')
+  src: url('./assets/fonts/Geist.ttf') format('truetype');
 }
 
 @font-face {
   font-family: "NotoSansLao";
-  src: url('./assets/fonts/NotoSansLao.ttf') format('truetype')
+  src: url('./assets/fonts/NotoSansLao.ttf') format('truetype');
 }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
-  }
+/* ─── Global Styles ─── */
+html {
+  scroll-behavior: smooth;
 }
 
+body {
+  font-family: "Geist", sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+}
 
+.lang-en {
+  font-family: "Geist", sans-serif;
+}
 
-/* Custom animations */
+.lang-la {
+  font-family: "NotoSansLao", sans-serif;
+}
+
+/* ─── Animations ─── */
 @keyframes slide-in-from-bottom-8 {
   from {
     transform: translateY(2rem);
     opacity: 0;
   }
-
   to {
     transform: translateY(0);
     opacity: 1;
@@ -77,7 +117,6 @@
     transform: scale(0.95);
     opacity: 0;
   }
-
   to {
     transform: scale(1);
     opacity: 1;
@@ -89,7 +128,6 @@
     transform: scale(0.5);
     opacity: 0;
   }
-
   to {
     transform: scale(1);
     opacity: 1;
@@ -97,27 +135,9 @@
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
-body {
-  font-family: "Geist", sans-serif;
-}
-
-.lang-en {
-  font-family: "Geist", sans-serif;
-}
-
-.lang-la {
-  font-family: "NotoSansLao", sans-serif;
-}
-
 
 .animate-in {
   animation-fill-mode: both;
@@ -137,4 +157,13 @@ body {
 
 .fade-in {
   animation-name: fade-in;
+}
+
+/* ─── Background Grid ─── */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.4;
 }
