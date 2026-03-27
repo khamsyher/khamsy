@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs, FaGitAlt } from "react-icons/fa";
 import {
-  SiNuxtdotjs,
   SiRedux,
   SiTailwindcss,
   SiPostman,
@@ -51,7 +50,6 @@ const technologies: Technology[] = [
   { name: "PHP", category: "Backend", icon: SiPhp, color: "from-indigo-600 to-indigo-400", level: "Advanced" },
   { name: "Python", category: "Backend", icon: SiPython, color: "from-yellow-400 to-blue-500", level: "Advanced" },
   { name: "React.js", category: "Frontend", icon: FaReact, color: "from-cyan-500 to-blue-500", level: "Expert" },
-  { name: "Nuxt.js", category: "Frontend", icon: SiNuxtdotjs, color: "from-green-500 to-green-700", level: "Advanced" },
   { name: "Redux Toolkit", category: "Frontend", icon: SiRedux, color: "from-purple-600 to-purple-400", level: "Advanced" },
   { name: "Flutter", category: "Frontend", icon: SiFlutter, color: "from-blue-500 to-cyan-400", level: "Intermediate" },
   { name: "React Native", category: "Frontend", icon: SiReact, color: "from-cyan-500 to-blue-500", level: "Advanced" },

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, type ReactNode, useState, useEffect } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, type ReactNode, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Define types
@@ -26,13 +26,15 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [language, setLanguage] = useState<string>(i18n.language);
 
-  const toggleSidebar = () => setIsSidebarActive(!isSidebarActive);
+  const toggleSidebar = useCallback(() => setIsSidebarActive((prev) => !prev), []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const newTheme = prev === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', newTheme);
+      return newTheme;
+    });
+  }, []);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -49,11 +51,11 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setTheme(savedTheme);
   }, []);
 
-  const changeLang = (newLang: string) => {
+  const changeLang = useCallback((newLang: string) => {
     i18n.changeLanguage(newLang);
     setLanguage(newLang);
     localStorage.setItem('lang', newLang);
-  };
+  }, [i18n]);
 
   useEffect(() => {
     document.body.classList.remove('lang-en', 'lang-la', 'lang-cn');
@@ -66,8 +68,12 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   }, [language]);
 
+  const contextValue = useMemo<AppContextType>(() => ({
+    isSidebarActive, toggleSidebar, theme, toggleTheme, language, changeLang,
+  }), [isSidebarActive, toggleSidebar, theme, toggleTheme, language, changeLang]);
+
   return (
-    <AppContext.Provider value={{ isSidebarActive, toggleSidebar, theme, toggleTheme, language, changeLang }}>
+    <AppContext.Provider value={contextValue}>
       {children}
     </AppContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useSpring } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { LanguageIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
@@ -15,35 +15,36 @@ const navLinks = [
   { to: "#contact", labelKey: "nav.contact" },
 ];
 
+const sectionIds = navLinks.map((link) => link.to.replace("#", ""));
+
 const Navbar = () => {
   const { t } = useTranslation();
-  const { theme, toggleTheme } = useAppContext();
-  const { language, changeLang } = useAppContext();
+  const { theme, toggleTheme, language, changeLang } = useAppContext();
   const [langButtonOpen, setLangButtonOpen] = useState(false);
   const langDropdownRef = useRef<HTMLLIElement>(null);
   const [activeSection, setActiveSection] = useState<string>("home");
 
-  const toggleDropdown = () => setLangButtonOpen(!langButtonOpen);
+  const toggleDropdown = useCallback(() => setLangButtonOpen((prev) => !prev), []);
 
-  const handleLanguageChange = (lang: string) => {
+  const handleLanguageChange = useCallback((lang: string) => {
     changeLang(lang);
     setLangButtonOpen(false);
-  };
+  }, [changeLang]);
 
   // Springy navbar auto-hide on scroll
   const navPositionY = useSpring(0, { stiffness: 500, damping: 40 });
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  const controlNavbar = () => {
-    const currentScrollY = window.scrollY;
-    navPositionY.set(currentScrollY > lastScrollY ? -100 : 0);
-    setLastScrollY(currentScrollY);
-  };
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
-    window.addEventListener("scroll", controlNavbar);
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY;
+      navPositionY.set(currentScrollY > lastScrollYRef.current ? -100 : 0);
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", controlNavbar, { passive: true });
     return () => window.removeEventListener("scroll", controlNavbar);
-  }, [lastScrollY]);
+  }, [navPositionY]);
 
   useEffect(() => {
     if (!langButtonOpen) return;
@@ -58,7 +59,6 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sectionIds = navLinks.map((link) => link.to.replace("#", ""));
       let current = sectionIds[0];
 
       for (const id of sectionIds) {
@@ -90,7 +90,7 @@ const Navbar = () => {
               key={labelKey}
               className={`py-2 px-4 rounded-full text-sm font-medium transition-all duration-300
                 ${isActive
-                  ? "bg-primary text-primary-foreground shadow-md"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-105 ring-1 ring-primary/30"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
             >
